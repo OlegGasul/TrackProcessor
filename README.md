@@ -14,4 +14,4 @@ Lombok plugin for IDE
 
 For example:
 
-`mvn spring-boot:run -Dspring-boot.run.arguments="'DEBRV' 'DEHAM' 'DEBRV_DEHAM_historical_routes.csv' 'result.csv'"`
+`mvn spring-boot:run -Dspring-boot.run.arguments="'DEBRV' 'DEHAM' 'routes.csv' 'result.csv'"`
