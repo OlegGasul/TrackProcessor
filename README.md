@@ -1,6 +1,6 @@
 # GPS track processor
 Program for searching the best representative track from a list.
-The original list of track could contain wrong data ("noise") or non-optimal route.
+The original list of tracks could contain wrong data ("noise") or non-optimal route.
 
 ### Dependencies
 Java 11+
