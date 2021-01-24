@@ -1,9 +1,10 @@
 # GPS track processor
+Program for searching the best representative track from a list with avoiding noises.
 
 ### Dependencies
-Java 11
+Java 11+
 
-Maven
+Maven 3.6.0+
 
 Lombok plugin for IDE
 
