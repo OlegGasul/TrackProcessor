@@ -2,12 +2,14 @@ package com.kuehnenagel.trackprocessor.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
 @Builder
+@EqualsAndHashCode
 @AllArgsConstructor
 public class Track {
     private String vesselId;

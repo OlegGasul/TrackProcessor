@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CsvWriter {
@@ -18,15 +19,15 @@ public class CsvWriter {
         try (FileWriter out = new FileWriter(filePath);
              CSVPrinter printer = CSVFormat.DEFAULT.withHeader(CsvReader.HEADERS).print(out)) {
             for (Track track: tracks) {
-                Double[] pairs = track.getCoordinates().stream()
-                        .map(coordinate -> new Double[] { coordinate.getLat(), coordinate.getLon() })
-                        .toArray(Double[]::new);
-                String points = GSON.toJson(pairs);
+                List<Double[]> pairs = track.getCoordinates().stream()
+                    .map(coordinate -> new Double[] { coordinate.getLat(), coordinate.getLon() })
+                    .collect(Collectors.toList());
+                String points = GSON.toJson(pairs.toArray());
 
                 printer.printRecord(
-                        track.getVesselId(), track.getFromSeq(), track.getToSeq(),
-                        track.getFromPort(), track.getToPort(),
-                        track.getLegDuration(), track.getCount(), points);
+                    track.getVesselId(), track.getFromSeq(), track.getToSeq(),
+                    track.getFromPort(), track.getToPort(),
+                    track.getLegDuration(), track.getCount(), points);
             }
 
             printer.flush();

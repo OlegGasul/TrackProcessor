@@ -9,14 +9,14 @@ import java.util.List;
 public class GeoTools {
     private static final int EARTH_RADIUS = 6371;
 
-    public double calculateDistance(List<Coordinate> route) {
-        if (route == null || route.size() < 2) {
+    public double calculateDistance(List<Coordinate> track) {
+        if (track == null || track.size() < 2) {
             return 0;
         }
 
         double distance = 0;
-        for (int i = 1; i < route.size(); i++) {
-            distance += calculateDistance(route.get(i), route.get(i - 1));
+        for (int i = 1; i < track.size(); i++) {
+            distance += calculateDistance(track.get(i), track.get(i - 1));
         }
 
         return distance;
