@@ -3,8 +3,6 @@ package com.kuehnenagel.trackprocessor.service;
 import com.google.gson.Gson;
 import com.kuehnenagel.trackprocessor.model.Coordinate;
 import com.kuehnenagel.trackprocessor.model.Track;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
@@ -54,16 +52,9 @@ public class CsvReader {
     }
 
     private List<Coordinate> parseCoordinates(String json) {
-        Points points = GSON.fromJson(json, Points.class);
-        return points.values.stream()
-            .map(list -> Coordinate.builder().lat(list.get(0)).lon(list.get(1)).build())
+        List<List<Double>> points = GSON.fromJson(json, List.class);
+        return points.stream()
+            .map((list) -> Coordinate.builder().lat(list.get(0)).lon(list.get(1)).build())
             .collect(Collectors.toList());
     }
-
-    @Getter
-    @Setter
-    private static class Points {
-        private List<List<Double>> values;
-    }
-
 }
