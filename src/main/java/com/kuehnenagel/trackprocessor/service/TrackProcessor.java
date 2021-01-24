@@ -2,6 +2,8 @@ package com.kuehnenagel.trackprocessor.service;
 
 import com.kuehnenagel.trackprocessor.model.Track;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +16,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class TrackProcessor {
+    private static final Log LOG = LogFactory.getLog(CsvWriter.class);
     private static final double PERCENTAGE = 0.1; 
 
     @Autowired
     private GeoTools geoTools;
 
     public Track findMostRepresentativeTrack(List<Track> tracks) {
+        LOG.info("Starting calculation for " + tracks.size() + " tracks...");
+
         Map<Track, Double> distanceMap = tracks.stream()
             .collect(Collectors.toMap(track -> track, track -> geoTools.calculateDistance(track.getCoordinates())));
         double[] distances = ArrayUtils.toPrimitive(distanceMap.values().toArray(Double[]::new));
@@ -36,7 +41,9 @@ public class TrackProcessor {
         }).collect(Collectors.toList());
 
         double filteredAverageDistance = filtered.stream().mapToDouble(track -> distanceMap.get(track)).average().orElse(0.0);
-        
+
+        LOG.info("Calculation finished.");
+
         return filtered.stream()
             .min(Comparator.comparingDouble(track -> distanceMap.get(track) - filteredAverageDistance))
             .orElse(null);

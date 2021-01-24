@@ -4,8 +4,8 @@ import com.kuehnenagel.trackprocessor.model.Track;
 import com.kuehnenagel.trackprocessor.service.CsvReader;
 import com.kuehnenagel.trackprocessor.service.CsvWriter;
 import com.kuehnenagel.trackprocessor.service.TrackProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,11 +13,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class TrackProcessorApplication implements ApplicationRunner {
-    private static final Logger logger = LoggerFactory.getLogger(TrackProcessorApplication.class);
+    private static final Log LOG = LogFactory.getLog(TrackProcessorApplication.class);
     
     public static void main(String[] args) {
         SpringApplication.run(TrackProcessorApplication.class, args);
@@ -36,7 +35,7 @@ public class TrackProcessorApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         List<String> params = args.getNonOptionArgs();
         if (params.size() < 4) {
-            logger.error("Usage: <From port> <To port> <Input file path> <Output file path>");
+            LOG.error("Usage: mvn spring-boot:run -Dspring-boot.run.arguments=\"<From port> <To port> <Input file path> <Output file path>\"");
             return;
         }
 
@@ -47,7 +46,7 @@ public class TrackProcessorApplication implements ApplicationRunner {
 
         List<Track> tracks = csvReader.loadTracks(inputFilePath, fromPort, toPort);
         if (tracks == null) {
-            logger.info("Directions from {0} to {1} has not been found!", new Object[] { fromPort, toPort });
+            LOG.info("Directions from " + fromPort + " to " + toPort + " has not been found!");
             return;
         }
 

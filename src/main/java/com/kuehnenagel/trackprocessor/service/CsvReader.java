@@ -5,8 +5,8 @@ import com.kuehnenagel.trackprocessor.model.Coordinate;
 import com.kuehnenagel.trackprocessor.model.Track;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
@@ -18,7 +18,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class CsvReader {
-    private static final Logger logger = LoggerFactory.getLogger(CsvWriter.class);
+    private static final Log LOG = LogFactory.getLog(CsvReader.class);
     
     private static final Gson GSON = new Gson();
 
@@ -54,7 +54,7 @@ public class CsvReader {
                     .build())
                 .collect(Collectors.toList());
         } catch (IOException ex) {
-            logger.error(ex.getMessage());
+            LOG.error(ex.getMessage());
             return null;
         }
     }
