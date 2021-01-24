@@ -18,7 +18,7 @@ For example:
 `mvn spring-boot:run -Dspring-boot.run.arguments="'DEBRV' 'DEHAM' 'routes.csv' 'result.csv'"`
 
 **The original data with "noise"**
-![Screenshot](with noise.png)
+![Screenshot](allTracks.png)
 
 **The most representative track after processing**
 ![Screenshot](result.png)
