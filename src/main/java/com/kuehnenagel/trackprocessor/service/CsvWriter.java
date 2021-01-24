@@ -15,21 +15,22 @@ public class CsvWriter {
     private static final Gson GSON = new Gson();
 
     public void writeCsv(String filePath, List<Track> tracks) throws IOException {
-        FileWriter out = new FileWriter(filePath);
-        CSVPrinter printer = CSVFormat.DEFAULT.withHeader(CsvReader.HEADERS).print(out);
+        try (FileWriter out = new FileWriter(filePath);
+             CSVPrinter printer = CSVFormat.DEFAULT.withHeader(CsvReader.HEADERS).print(out)) {
+            for (Track track: tracks) {
+                Double[] pairs = track.getCoordinates().stream()
+                        .map(coordinate -> new Double[] { coordinate.getLat(), coordinate.getLon() })
+                        .toArray(Double[]::new);
+                String points = GSON.toJson(pairs);
 
-        for (Track track: tracks) {
-            Double[] pairs = track.getCoordinates().stream()
-                .map(coordinate -> new Double[] { coordinate.getLat(), coordinate.getLon() })
-                .toArray(Double[]::new);
-            String points = GSON.toJson(pairs);
+                printer.printRecord(
+                        track.getVesselId(), track.getFromSeq(), track.getToSeq(),
+                        track.getFromPort(), track.getToPort(),
+                        track.getLegDuration(), track.getCount(), points);
+            }
 
-            printer.printRecord(
-                track.getVesselId(), track.getFromSeq(), track.getToSeq(),
-                track.getFromPort(), track.getToPort(),
-                track.getLegDuration(), track.getCount(), points);
+            printer.flush();
         }
-
     }
 
 }

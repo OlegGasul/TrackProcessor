@@ -20,7 +20,7 @@ import java.util.stream.StreamSupport;
 public class CsvReader {
     private static final Gson GSON = new Gson();
 
-    private static final String ID = "id";
+    private static final String VESSEL_ID = "id";
     private static final String FROM_SEQ = "from_seq";
     private static final String TO_SEQ = "to_seq";
     private static final String FROM_PORT = "from_port";
@@ -29,27 +29,28 @@ public class CsvReader {
     private static final String COUNT = "count";
     private static final String POINTS = "points";
 
-    public static final String[] HEADERS = { ID, FROM_SEQ, TO_SEQ, FROM_PORT, TO_PORT, LEG_DURATION, COUNT, POINTS };
+    public static final String[] HEADERS = {VESSEL_ID, FROM_SEQ, TO_SEQ, FROM_PORT, TO_PORT, LEG_DURATION, COUNT, POINTS };
 
     public List<Track> loadTracks(String filePath) throws IOException {
-        Reader in = new FileReader(filePath);
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT
-            .withHeader(HEADERS)
-            .withFirstRecordAsHeader()
-            .parse(in);
+        try (Reader in = new FileReader(filePath)) {
+            Iterable<CSVRecord> records = CSVFormat.DEFAULT
+                .withHeader(HEADERS)
+                .withFirstRecordAsHeader()
+                .parse(in);
 
-        return StreamSupport.stream(records.spliterator(), false)
-            .map(record -> Track.builder()
-                .vesselId(Long.parseLong(record.get(ID)))
-                .fromSeq(Long.parseLong(record.get(FROM_SEQ)))
-                .toSeq(Long.parseLong(record.get(TO_SEQ)))
-                .fromPort(record.get(FROM_PORT))
-                .toPort(record.get(TO_PORT))
-                .legDuration(Long.parseLong(record.get(LEG_DURATION)))
-                .count(Integer.parseInt(record.get(COUNT)))
-                .coordinates(parseCoordinates(record.get(POINTS)))
-                .build())
-            .collect(Collectors.toList());
+            return StreamSupport.stream(records.spliterator(), false)
+                .map(record -> Track.builder()
+                    .vesselId(record.get(VESSEL_ID))
+                    .fromSeq(Long.parseLong(record.get(FROM_SEQ)))
+                    .toSeq(Long.parseLong(record.get(TO_SEQ)))
+                    .fromPort(record.get(FROM_PORT))
+                    .toPort(record.get(TO_PORT))
+                    .legDuration(Long.parseLong(record.get(LEG_DURATION)))
+                    .count(Integer.parseInt(record.get(COUNT)))
+                    .coordinates(parseCoordinates(record.get(POINTS)))
+                    .build())
+                .collect(Collectors.toList());
+        }
     }
 
     private List<Coordinate> parseCoordinates(String json) {

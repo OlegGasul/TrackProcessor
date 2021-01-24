@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class Track {
-    private Long vesselId;
+    private String vesselId;
     private Long fromSeq;
     private Long toSeq;
     private String fromPort;
