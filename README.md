@@ -15,3 +15,9 @@ Lombok plugin for IDE
 For example:
 
 `mvn spring-boot:run -Dspring-boot.run.arguments="'DEBRV' 'DEHAM' 'routes.csv' 'result.csv'"`
+
+**The original data with "noise"**
+![Screenshot](with noise.png)
+
+**The most representative track after processing**
+![Screenshot](result.png)
