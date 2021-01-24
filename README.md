@@ -9,7 +9,7 @@ Lombok plugin for IDE
 
 ### Using
 
-mvn spring-boot:run -Dspring-boot.run.arguments="<Source port> <Destination port> <Input file> <Output file>"
+mvn spring-boot:run -Dspring-boot.run.arguments=<Source port> <Destination port> <Input file> <Output file>
 
 For example:
 
