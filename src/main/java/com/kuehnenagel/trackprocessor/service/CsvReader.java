@@ -5,6 +5,8 @@ import com.kuehnenagel.trackprocessor.model.Coordinate;
 import com.kuehnenagel.trackprocessor.model.Track;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
@@ -16,6 +18,8 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class CsvReader {
+    private static final Logger logger = LoggerFactory.getLogger(CsvWriter.class);
+    
     private static final Gson GSON = new Gson();
 
     private static final String VESSEL_ID = "id";
@@ -29,7 +33,7 @@ public class CsvReader {
 
     public static final String[] HEADERS = {VESSEL_ID, FROM_SEQ, TO_SEQ, FROM_PORT, TO_PORT, LEG_DURATION, COUNT, POINTS };
 
-    public List<Track> loadTracks(String filePath) throws IOException {
+    public List<Track> loadTracks(String filePath, String fromPort, String toPort) throws IOException {
         try (Reader in = new FileReader(filePath)) {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT
                 .withHeader(HEADERS)
@@ -37,6 +41,7 @@ public class CsvReader {
                 .parse(in);
 
             return StreamSupport.stream(records.spliterator(), false)
+                .filter(record -> fromPort.equals(record.get(FROM_PORT)) && toPort.equals(record.get(TO_PORT)))
                 .map(record -> Track.builder()
                     .vesselId(record.get(VESSEL_ID))
                     .fromSeq(Long.parseLong(record.get(FROM_SEQ)))
@@ -48,6 +53,9 @@ public class CsvReader {
                     .coordinates(parseCoordinates(record.get(POINTS)))
                     .build())
                 .collect(Collectors.toList());
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
+            return null;
         }
     }
 

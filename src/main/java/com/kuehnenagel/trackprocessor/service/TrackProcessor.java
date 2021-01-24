@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TrackProcessor {
-    private static final double VALUE = 0.05; 
+    private static final double PERCENTAGE = 0.1; 
 
     @Autowired
     private GeoTools geoTools;
@@ -27,8 +27,8 @@ public class TrackProcessor {
         double mean = new Mean().evaluate(distances);
         double deviation = new StandardDeviation().evaluate(distances);
 
-        double min = mean - deviation * VALUE;
-        double max = mean + deviation * VALUE;
+        double min = mean - deviation * PERCENTAGE;
+        double max = mean + deviation * PERCENTAGE;
         
         List<Track> filtered = tracks.stream().filter(track -> {
             Double distance = distanceMap.get(track);

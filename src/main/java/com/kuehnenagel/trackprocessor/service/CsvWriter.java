@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.kuehnenagel.trackprocessor.model.Track;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.FileWriter;
@@ -13,9 +15,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class CsvWriter {
+    private static final Logger logger = LoggerFactory.getLogger(CsvWriter.class);
     private static final Gson GSON = new Gson();
 
-    public void writeCsv(String filePath, List<Track> tracks) throws IOException {
+    public void writeCsv(String filePath, List<Track> tracks) {
         try (FileWriter out = new FileWriter(filePath);
              CSVPrinter printer = CSVFormat.DEFAULT.withHeader(CsvReader.HEADERS).print(out)) {
             for (Track track: tracks) {
@@ -31,6 +34,10 @@ public class CsvWriter {
             }
 
             printer.flush();
+            
+            logger.info("File \"{0}\" has been written successfully!", new Object[] { filePath });
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
         }
     }
 

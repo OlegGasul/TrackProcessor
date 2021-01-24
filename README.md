@@ -8,4 +8,5 @@ Maven
 Lombok plugin for IDE
 
 ### Using
-mvn spring-boot:run
+
+mvn spring-boot:run "<Source port>" "<Destination port>" "<Input CSV file>" "<Output CSV file>"
