@@ -45,7 +45,7 @@ public class TrackProcessor {
         LOG.info("Calculation finished.");
 
         return filtered.stream()
-            .min(Comparator.comparingDouble(track -> distanceMap.get(track) - filteredAverageDistance))
+            .min(Comparator.comparingDouble(track -> Math.abs(distanceMap.get(track) - filteredAverageDistance)))
             .orElse(null);
     }
 
