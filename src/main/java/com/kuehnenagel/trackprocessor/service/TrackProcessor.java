@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class TrackProcessor {
     private static final Log LOG = LogFactory.getLog(CsvWriter.class);
-    private static final double PERCENTAGE = 0.1; 
+    private static final double SCALE = 0.1;
 
     @Autowired
     private GeoTools geoTools;
@@ -32,8 +32,8 @@ public class TrackProcessor {
         double mean = new Mean().evaluate(distances);
         double deviation = new StandardDeviation().evaluate(distances);
 
-        double min = mean - deviation * PERCENTAGE;
-        double max = mean + deviation * PERCENTAGE;
+        double min = mean - deviation * SCALE;
+        double max = mean + deviation * SCALE;
         
         List<Track> filtered = tracks.stream().filter(track -> {
             Double distance = distanceMap.get(track);
